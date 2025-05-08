@@ -1,0 +1,20 @@
+@startuml
+
+autonumber
+
+actor Пользователь
+box authentication_basic
+    participant SpringSecurity
+    participant Serverlet
+end box
+
+Пользователь -> SpringSecurity: GET <b>http://localhost:8080/hello.html</b>
+SpringSecurity -> SpringSecurity: пользователь не\nаутентифицирован
+SpringSecurity --> Пользователь: <b>401 Unauthorized</b>\nWWW-Authenticate: Basic realm="Realm"
+Пользователь -> SpringSecurity: GET <b>http://localhost:8080/hello.html</b>\nAuthorization: Basic dXNlcjp1c2Vy
+SpringSecurity -> SpringSecurity: аутентификация\nпользователя
+SpringSecurity -> Serverlet: GET <b>http://localhost:8080/hello.html</b>\nAuthorization: Basic dXNlcjp1c2Vy
+Serverlet --> SpringSecurity: <b>200 OK</b>\nContent-Type text/plain;charset=UTF-8\nContent: Поздравляю! Вы прошли Basic аутентификацию
+SpringSecurity --> Пользователь: <b>200 OK</b>\nContent-Type text/plain;charset=UTF-8\nContent: Поздравляю! Вы прошли Basic аутентификацию
+
+@enduml
